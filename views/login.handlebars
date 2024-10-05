@@ -1,0 +1,30 @@
+{{!-- Login Page --}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Login - The Tech Blog</title>
+</head>
+<body>
+    <header>
+        <h1>The Tech Blog</h1>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/login">Login</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+    <div class="login-form">
+        <h2>Login</h2>
+        <form action="/api/users/login" method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="/signup">Sign up here</a></p>
+    </div>
+</body>
+</html>
