@@ -21,9 +21,11 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const user = await User.findOne({ where: { username: req.body.username } });
-    if (!user || !user.checkPassword(req.body.password)) {
+    
+    if (!user || !(await user.checkPassword(req.body.password))) { // Ensure password comparison
       return res.status(400).json({ message: 'Incorrect username or password' });
     }
+    
     req.session.save(() => {
       req.session.userId = user.id; // Store the user ID in the session
       req.session.loggedIn = true; // Set loggedIn to true
