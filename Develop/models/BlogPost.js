@@ -22,7 +22,7 @@ BlogPost.init(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'user', // Should match the 'User' model
+        model: 'users', // Should match the 'User' model
         key: 'id',
       },
     },
