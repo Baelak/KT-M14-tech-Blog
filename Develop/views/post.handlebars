@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Corrected path -->
     <title>{{post.title}} - The Tech Blog</title>
 </head>
 <body>
@@ -12,28 +12,31 @@
         <h1>The Tech Blog</h1>
         <nav>
             <a href="/">Home</a>
-            <a href="/dashboard">Dashboard</a>
-            <a href="/login">Login</a>
-            <a href="/logout">Logout</a>
+            {{#if logged_in}} <!-- Conditional rendering based on login status -->
+                <a href="/dashboard">Dashboard</a>
+                <a href="/logout">Logout</a>
+            {{else}}
+                <a href="/login">Login</a>
+            {{/if}}
         </nav>
     </header>
     <div class="blog-post">
         <h2>{{post.title}}</h2>
-        <p>{{post.contents}}</p>
+        <p>{{post.content}}</p> <!-- Ensure this matches your model -->
         <small>Posted by {{post.username}} on {{post.createdAt}}</small>
 
         <div class="comment-section">
             <h3>Comments</h3>
             {{#each comments}}
                 <div class="comment">
-                    <p>{{this.contents}}</p>
+                    <p>{{this.content}}</p> <!-- Ensure this matches your model -->
                     <small>Commented by {{this.username}} on {{this.createdAt}}</small>
                 </div>
             {{/each}}
 
-            {{#if loggedIn}}
+            {{#if logged_in}} <!-- Correct variable name for logged in status -->
                 <form action="/api/comments" method="POST">
-                    <textarea name="contents" placeholder="Leave a comment..." required></textarea>
+                    <textarea name="content" placeholder="Leave a comment..." required></textarea> <!-- Ensure this matches your model -->
                     <input type="hidden" name="postId" value="{{post.id}}">
                     <button type="submit">Submit Comment</button>
                 </form>

@@ -6,5 +6,24 @@
     <h2>{{this.title}}</h2>
     <p>{{this.content}}</p>
     <button>Edit</button>
+    <button class="delete-btn" data-id="{{this.id}}">Delete</button>
   </div>
 {{/each}}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).on('click', '.delete-btn', function() {
+    const postId = $(this).data('id');
+    $.ajax({
+      url: `/api/blogs/${postId}`, // Adjust the endpoint according to your routes
+      method: 'DELETE',
+      success: function() {
+        location.reload(); // Refresh the page to see the changes
+      },
+      error: function(err) {
+        console.error(err);
+        alert('Failed to delete the post. Please try again.');
+      }
+    });
+  });
+</script>

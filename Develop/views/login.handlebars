@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Corrected path -->
     <title>Login - The Tech Blog</title>
 </head>
 <body>
@@ -12,9 +12,13 @@
         <h1>The Tech Blog</h1>
         <nav>
             <a href="/">Home</a>
-            <a href="/dashboard">Dashboard</a>
-            <a href="/login">Login</a>
-            <a href="/logout">Logout</a>
+            {{#if logged_in}} <!-- Conditional rendering based on login status -->
+                <a href="/dashboard">Dashboard</a>
+                <a href="/logout">Logout</a>
+            {{else}}
+                <a href="/login">Login</a>
+                <a href="/signup">Sign up</a>
+            {{/if}}
         </nav>
     </header>
     <div class="login-form">
