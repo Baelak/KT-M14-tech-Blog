@@ -22,9 +22,9 @@
     </header>
     <div class="signup-form">
         <h2>Sign Up</h2>
-        <form action="/api/users/signup" method="POST"> <!-- Ensure the correct action for signing up -->
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
+        <form action="/api/users/signup" method="POST"> <!-- Corrected form action -->
+            <input type="text" id="username-signup" name="username" placeholder="Username" required>
+            <input type="password" id="password-signup" name="password" placeholder="Password" required>
             <button type="submit">Sign Up</button>
         </form>
         <p>Already have an account? <a href="/login">Log in here</a></p>
