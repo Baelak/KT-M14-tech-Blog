@@ -1,3 +1,4 @@
+// server.js
 const path = require('path');
 const express = require('express');
 const session = require('express-session');
@@ -17,22 +18,24 @@ const hbs = exphbs.create({ helpers });
 const sess = {
   secret: process.env.SESSION_SECRET || 'tech_blog_key',
   cookie: {
-    maxAge: 60 * 60 * 1000,
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    maxAge: 60 * 60 * 1000,  // 1 hour
+    httpOnly: true,          // Prevent client-side JavaScript from accessing the cookie
+    secure: process.env.NODE_ENV === 'production',  // Use HTTPS in production
+    sameSite: 'strict',      // Prevents CSRF attacks
   },
   resave: false,
   saveUninitialized: true,
   store: new SequelizeStore({
     db: sequelize,
-    checkExpirationInterval: 15 * 60 * 1000,
-    expiration: 24 * 60 * 60 * 1000,
+    checkExpirationInterval: 15 * 60 * 1000,  // Clean up expired sessions every 15 minutes
+    expiration: 24 * 60 * 60 * 1000,          // Session expires after 24 hours
   }),
 };
 
+// Apply session middleware
 app.use(session(sess));
 
+// Set Handlebars as the view engine
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
@@ -41,12 +44,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Add a try/catch block around route handling to capture and log errors
-try {
-  app.use(routes);
-} catch (err) {
-  console.error('Error while handling routes:', err);
-}
+// Route handling
+app.use(routes);
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('An unexpected error occurred:', err);
+  res.status(500).json({ error: 'Internal Server Error' });
+});
 
 // Sync Sequelize and start server
 sequelize.sync({ force: false })

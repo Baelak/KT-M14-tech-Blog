@@ -1,17 +1,20 @@
 const router = require('express').Router();
-const { Comment } = require('../../models');
-const withAuth = require('../../utils/auth');
+const { Comment } = require('../../models'); // Import the Comment model
+const withAuth = require('../../utils/auth'); // Authentication middleware
 
+// CREATE a new comment
 router.post('/', withAuth, async (req, res) => {
   try {
     const newComment = await Comment.create({
       ...req.body,
-      user_id: req.session.user_id,
+      userId: req.session.userId, // Ensure you're using the correct session variable
     });
-    res.status(200).json(newComment);
+    res.status(201).json(newComment); // Use 201 for resource creation
   } catch (err) {
-    res.status(500).json(err);
+    console.error(err); // Log the error for debugging
+    res.status(500).json({ message: 'An error occurred while creating the comment.' }); // Improved error message
   }
 });
 
+// Export the router
 module.exports = router;

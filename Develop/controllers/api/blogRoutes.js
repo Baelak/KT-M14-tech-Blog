@@ -1,17 +1,20 @@
 const router = require('express').Router();
-const { Blog } = require('../../models');
-const withAuth = require('../../utils/auth');
+const { BlogPost } = require('../../models'); // Make sure to import the correct model
+const withAuth = require('../../utils/auth'); // Authentication middleware
 
+// CREATE a new blog post
 router.post('/', withAuth, async (req, res) => {
   try {
-    const newBlog = await Blog.create({
+    const newBlogPost = await BlogPost.create({
       ...req.body,
-      user_id: req.session.user_id,
+      userId: req.session.userId, // Ensure you're using the correct session variable
     });
-    res.status(200).json(newBlog);
+    res.status(201).json(newBlogPost); // Use 201 for resource creation
   } catch (err) {
-    res.status(500).json(err);
+    console.error(err); // Log the error for debugging
+    res.status(500).json({ message: 'An error occurred while creating the blog post.' }); // Improved error message
   }
 });
 
+// Export the router
 module.exports = router;

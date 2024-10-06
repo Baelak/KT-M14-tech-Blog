@@ -1,46 +1,50 @@
 const router = require('express').Router();
-const { User } = require('../../models');
-const bcrypt = require('bcrypt');
-const withAuth = require('../../utils/auth');
+const { User } = require('../../models'); // Import the User model
+const withAuth = require('../../utils/auth'); // Authentication middleware
 
+// SIGNUP a new user
 router.post('/signup', async (req, res) => {
   try {
-    const newUser = await User.create(req.body);
+    const newUser = await User.create(req.body); // Create a new user
     req.session.save(() => {
-      req.session.user_id = newUser.id;
-      req.session.logged_in = true;
-      res.status(200).json(newUser);
+      req.session.userId = newUser.id; // Store the user ID in the session
+      req.session.loggedIn = true; // Set loggedIn to true
+      res.status(201).json(newUser); // Respond with the new user and status 201
     });
   } catch (err) {
-    res.status(500).json(err);
+    console.error(err); // Log the error for debugging
+    res.status(500).json({ message: 'An error occurred while signing up.' }); // Improved error message
   }
 });
 
+// LOGIN an existing user
 router.post('/login', async (req, res) => {
   try {
     const user = await User.findOne({ where: { username: req.body.username } });
     if (!user || !user.checkPassword(req.body.password)) {
-      res.status(400).json({ message: 'Incorrect username or password' });
-      return;
+      return res.status(400).json({ message: 'Incorrect username or password' });
     }
     req.session.save(() => {
-      req.session.user_id = user.id;
-      req.session.logged_in = true;
-      res.json({ user, message: 'You are now logged in!' });
+      req.session.userId = user.id; // Store the user ID in the session
+      req.session.loggedIn = true; // Set loggedIn to true
+      res.json({ user, message: 'You are now logged in!' }); // Respond with user info
     });
   } catch (err) {
-    res.status(500).json(err);
+    console.error(err); // Log the error for debugging
+    res.status(500).json({ message: 'An error occurred during login.' }); // Improved error message
   }
 });
 
+// LOGOUT a user
 router.post('/logout', withAuth, (req, res) => {
-  if (req.session.logged_in) {
+  if (req.session.loggedIn) {
     req.session.destroy(() => {
-      res.status(204).end();
+      res.status(204).end(); // Respond with no content on successful logout
     });
   } else {
-    res.status(404).end();
+    res.status(404).json({ message: 'No user is logged in.' }); // Improved response for no user session
   }
 });
 
+// Export the router
 module.exports = router;
