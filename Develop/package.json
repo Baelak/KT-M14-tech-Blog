@@ -4,7 +4,7 @@
     "description": "A CMS-style tech blog using MVC paradigm",
     "main": "server.js",
     "scripts": {
-      "start": "node Develop/server.js",
+      "start": "node server.js",
       "seed": "node seeds/index.js",
       "test": "echo \"Error: no test specified\" && exit 1"
     },
