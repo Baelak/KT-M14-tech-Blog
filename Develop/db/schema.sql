@@ -1,3 +1,6 @@
+-- Title: Tech Blog Database Schema
+-- Path: schema.sql
+
 -- Create the database
 CREATE DATABASE tech_blog_db;
 
@@ -14,7 +17,7 @@ CREATE TABLE users (
 );
 
 -- Create the blogs table
-CREATE TABLE blogs (
+CREATE TABLE blogPosts (
     id SERIAL PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
     content TEXT NOT NULL,
@@ -27,6 +30,6 @@ CREATE TABLE comments (
     id SERIAL PRIMARY KEY,
     comment TEXT NOT NULL,
     user_id INT REFERENCES users(id) ON DELETE CASCADE,
-    blog_id INT REFERENCES blogs(id) ON DELETE CASCADE,
+    blog_post_id INT REFERENCES blogPosts(id) ON DELETE CASCADE, -- Correct reference to blogPosts
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
