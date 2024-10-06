@@ -5,7 +5,13 @@ const withAuth = require('../../utils/auth'); // Authentication middleware
 // SIGNUP a new user
 router.post('/signup', async (req, res) => {
   try {
-    const newUser = await User.create(req.body); // Create a new user
+    // Check if password meets the required length
+    if (req.body.password.length < 8) {
+      return res.status(400).json({ message: 'Password must be at least 8 characters long.' });
+    }
+
+    // Create a new user
+    const newUser = await User.create(req.body); 
     req.session.save(() => {
       req.session.userId = newUser.id; // Store the user ID in the session
       req.session.loggedIn = true; // Set loggedIn to true
@@ -13,7 +19,7 @@ router.post('/signup', async (req, res) => {
     });
   } catch (err) {
     console.error(err); // Log the error for debugging
-    res.status(500).json({ message: 'An error occurred while signing up.' }); // Improved error message
+    res.status(500).json({ message: 'An error occurred while signing up. Please try again.' }); // Improved error message
   }
 });
 
@@ -23,7 +29,7 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({ where: { username: req.body.username } });
     
     if (!user || !(await user.checkPassword(req.body.password))) { // Ensure password comparison
-      return res.status(400).json({ message: 'Incorrect username or password' });
+      return res.status(400).json({ message: 'Incorrect username or password.' });
     }
     
     req.session.save(() => {
@@ -33,7 +39,7 @@ router.post('/login', async (req, res) => {
     });
   } catch (err) {
     console.error(err); // Log the error for debugging
-    res.status(500).json({ message: 'An error occurred during login.' }); // Improved error message
+    res.status(500).json({ message: 'An error occurred during login. Please try again.' }); // Improved error message
   }
 });
 
