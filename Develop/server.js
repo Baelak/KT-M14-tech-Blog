@@ -7,51 +7,52 @@ const sequelize = require('./config/connection');
 const routes = require('./controllers');
 const helpers = require('./utils/helpers');
 
-// Initialize express app
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Set up Handlebars.js as the templating engine with helpers
+// Set up Handlebars.js as the templating engine
 const hbs = exphbs.create({ helpers });
 
-// Configure session with Sequelize store
+// Session configuration
 const sess = {
-  secret: process.env.SESSION_SECRET || 'tech_blog_key', // Secret should be defined in .env
+  secret: process.env.SESSION_SECRET || 'tech_blog_key',
   cookie: {
-    maxAge: 60 * 60 * 1000, // 1 hour
-    httpOnly: true,         // Prevents client-side JS from accessing the cookie
-    secure: process.env.NODE_ENV === 'production', // true if HTTPS in production
-    sameSite: 'strict',     // Helps prevent CSRF attacks
+    maxAge: 60 * 60 * 1000,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
   },
-  resave: false, // Prevent session from being saved repeatedly if unmodified
-  saveUninitialized: true, // Saves uninitialized sessions
+  resave: false,
+  saveUninitialized: true,
   store: new SequelizeStore({
-    db: sequelize,         // Link to the Sequelize instance
-    checkExpirationInterval: 15 * 60 * 1000, // Interval for cleaning expired sessions (15 minutes)
-    expiration: 24 * 60 * 60 * 1000 // Session expires after 1 day
+    db: sequelize,
+    checkExpirationInterval: 15 * 60 * 1000,
+    expiration: 24 * 60 * 60 * 1000,
   }),
 };
 
-// Apply session middleware
 app.use(session(sess));
 
-// Set Handlebars as the view engine
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
-// Middleware for parsing request body and serving static files
+// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Use the defined routes
-app.use(routes);
+// Add a try/catch block around route handling to capture and log errors
+try {
+  app.use(routes);
+} catch (err) {
+  console.error('Error while handling routes:', err);
+}
 
-// Sync Sequelize models with the database and start the server
-sequelize.sync({ force: false }) // `force: false` ensures no data loss
+// Sync Sequelize and start server
+sequelize.sync({ force: false })
   .then(() => {
-    app.listen(PORT, () => console.log(`💚 Server is running on http://localhost:${PORT}`));
+    app.listen(PORT, () => console.log(`💚 Now listening on http://localhost:${PORT}`));
   })
   .catch(err => {
-    console.error('Unable to connect to the database:', err); // Error handling for database connection
+    console.error('Unable to connect to the database:', err);
   });
