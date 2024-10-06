@@ -5,22 +5,29 @@ const commentData = require('./comment-seeds'); // Import comment data directly
 const { User, BlogPost, Comment } = require('../models'); // Import models
 
 const seedAll = async () => {
-  await sequelize.sync({ force: true });
-  console.log('\n----- DATABASE SYNCED -----\n');
-  
-  // Seed users first
-  await User.bulkCreate(userData, { individualHooks: true });
-  console.log('\n----- USERS SEEDED -----\n');
+  try {
+    // Sync the database
+    await sequelize.sync({ force: true });
+    console.log('\n----- DATABASE SYNCED -----\n');
+    
+    // Seed users first
+    await User.bulkCreate(userData, { individualHooks: true });
+    console.log('\n----- USERS SEEDED -----\n');
 
-  // Then seed blog posts
-  await BlogPost.bulkCreate(blogData);
-  console.log('\n----- BLOGS SEEDED -----\n');
+    // Then seed blog posts
+    await BlogPost.bulkCreate(blogData);
+    console.log('\n----- BLOGS SEEDED -----\n');
 
-  // Finally, seed comments
-  await Comment.bulkCreate(commentData);
-  console.log('\n----- COMMENTS SEEDED -----\n');
+    // Finally, seed comments
+    await Comment.bulkCreate(commentData);
+    console.log('\n----- COMMENTS SEEDED -----\n');
 
-  process.exit(0);
+  } catch (error) {
+    console.error('Error seeding data:', error);
+  } finally {
+    process.exit(0);
+  }
 };
 
+// Call the seedAll function to initiate seeding
 seedAll();
