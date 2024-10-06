@@ -1,33 +1,43 @@
 const sequelize = require('../config/connection');
-const userData = require('./user-seeds'); // Import user data directly
-const blogData = require('./blog-seeds'); // Import blog data directly
-const commentData = require('./comment-seeds'); // Import comment data directly
-const { User, BlogPost, Comment } = require('../models'); // Import models
+const { User, BlogPost, Comment } = require('../models');
+const userData = require('./user-seeds');
+const blogData = require('./blog-seeds');
+const commentData = require('./comment-seeds');
 
-const seedAll = async () => {
-  try {
-    // Sync the database
+const seedDatabase = async () => {
     await sequelize.sync({ force: true });
-    console.log('\n----- DATABASE SYNCED -----\n');
-    
-    // Seed users first
-    await User.bulkCreate(userData, { individualHooks: true });
-    console.log('\n----- USERS SEEDED -----\n');
+    console.log('----- DATABASE SYNCED -----');
 
-    // Then seed blog posts
-    await BlogPost.bulkCreate(blogData);
-    console.log('\n----- BLOGS SEEDED -----\n');
+    // Seed Users
+    await User.bulkCreate(userData);
+    console.log('----- USERS SEEDED -----');
 
-    // Finally, seed comments
-    await Comment.bulkCreate(commentData);
-    console.log('\n----- COMMENTS SEEDED -----\n');
+    // Fetch all user IDs for assigning to blog posts
+    const users = await User.findAll();
+    const userIds = users.map(user => user.id);
 
-  } catch (error) {
-    console.error('Error seeding data:', error);
-  } finally {
+    // Seed Blog Posts using the blogData provided
+    const blogPosts = blogData.map((blog, index) => ({
+        ...blog,
+        user_id: userIds[index % userIds.length], // Assign user IDs cyclically if there are more blogs than users
+        createdAt: new Date(),
+        updatedAt: new Date(),
+    }));
+
+    await BlogPost.bulkCreate(blogPosts);
+    console.log('----- BLOG POSTS SEEDED -----');
+
+    // Seed Comments using the commentData provided
+    const comments = commentData.map(comment => ({
+        ...comment,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+    }));
+
+    await Comment.bulkCreate(comments);
+    console.log('----- COMMENTS SEEDED -----');
+
     process.exit(0);
-  }
 };
 
-// Call the seedAll function to initiate seeding
-seedAll();
+seedDatabase();

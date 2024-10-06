@@ -5,6 +5,11 @@ class Comment extends Model {}
 
 Comment.init(
   {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     content: {
       type: DataTypes.TEXT,
       allowNull: false,
@@ -12,23 +17,24 @@ Comment.init(
     userId: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'users',
+        model: 'users', // Reference the 'User' model
         key: 'id',
       },
     },
-    blogPostid: {
+    blogPostId: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'blogPosts',
+        model: 'blogPost', // Reference the 'BlogPost' model
         key: 'id',
       },
     },
   },
   {
     sequelize,
+    modelName: 'comment',
     freezeTableName: true,
     underscored: true,
-    modelName: 'comment',
+    timestamps: true,
   }
 );
 

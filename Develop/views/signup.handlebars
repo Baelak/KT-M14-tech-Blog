@@ -23,6 +23,7 @@
     <div class="signup-form">
         <h2>Sign Up</h2>
         <form action="/api/users/signup" method="POST"> <!-- Correct form action -->
+            <input type="text" id="email-signup" name="email" placeholder="Email Address" required>
             <input type="text" id="username-signup" name="username" placeholder="Username" required>
             <input type="password" id="password-signup" name="password" placeholder="Password" required>
             <button type="submit">Sign Up</button>

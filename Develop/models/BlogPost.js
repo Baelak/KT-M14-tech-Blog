@@ -22,7 +22,7 @@ BlogPost.init(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'users', // Should match the 'User' model
+        model: 'users', // Reference the 'User' model
         key: 'id',
       },
     },
@@ -30,6 +30,9 @@ BlogPost.init(
   {
     sequelize,
     modelName: 'blogPost',
+    freezeTableName: true,
+    underscored: true,
+    timestamps: true,
   }
 );
 

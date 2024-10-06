@@ -14,7 +14,7 @@ CREATE TABLE users (
 );
 
 -- Create the blogs table
-CREATE TABLE blogPosts (
+CREATE TABLE blogPost (
     id SERIAL PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
     content TEXT NOT NULL,
@@ -25,8 +25,8 @@ CREATE TABLE blogPosts (
 -- Create the comments table
 CREATE TABLE comments (
     id SERIAL PRIMARY KEY,
-    comment TEXT NOT NULL,
+    content TEXT NOT NULL,
     user_id INT REFERENCES users(id) ON DELETE CASCADE,
-    blog_post_id INT REFERENCES blogPosts(id) ON DELETE CASCADE,
+    blog_post_id INT REFERENCES blogPost(id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
