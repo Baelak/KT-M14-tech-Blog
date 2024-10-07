@@ -21,8 +21,9 @@ const signupFormHandler = async (event) => {
   
         // Handle the server response
         if (response.ok) {
-          // If signup is successful, redirect to the dashboard
-          document.location.replace('/dashboard');
+          const result = await response.json(); // Parse the JSON response
+          alert(result.message); // Display the success message
+          document.location.replace(result.redirect); // Redirect to the dashboard
         } else {
           // Parse the error response if signup fails
           const errorResponse = await response.json();
@@ -38,8 +39,7 @@ const signupFormHandler = async (event) => {
       // Alert if any of the fields are empty
       alert('Please fill in all fields.');
     }
-  };
+};
   
-  // Attach the event listener to the signup form
-  document.querySelector('.signup-form').addEventListener('submit', signupFormHandler);
-  
+// Attach the event listener to the signup form
+document.querySelector('.signup-form form').addEventListener('submit', signupFormHandler);
