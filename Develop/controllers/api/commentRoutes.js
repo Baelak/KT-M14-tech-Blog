@@ -12,7 +12,7 @@ router.post('/', withAuth, async (req, res) => {
     res.status(201).json(newComment); // Use 201 for resource creation
   } catch (err) {
     console.error(err); // Log the error for debugging
-    res.status(500).json({ message: 'An error occurred while creating the comment.' }); // Improved error message
+    res.status(500).json({ message: 'An error occurred while creating the comment. 😅' }); // Improved error message
   }
 });
 

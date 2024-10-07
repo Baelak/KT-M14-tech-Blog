@@ -5,22 +5,29 @@ const loginFormHandler = async (event) => {
     const password = document.querySelector('#password-login').value.trim();
   
     if (username && password) {
-        const response = await fetch('/api/users/login', {
-            method: 'POST',
-            body: JSON.stringify({ username, password }),
-            headers: { 'Content-Type': 'application/json' },
-        });
+        try {
+            const response = await fetch('/api/users/login', {
+                method: 'POST',
+                body: JSON.stringify({ username, password }),
+                headers: { 'Content-Type': 'application/json' },
+            });
   
-        if (response.ok) {
-            document.location.replace('/dashboard');
-        } else {
-            const errorResponse = await response.json(); // Get the error response for debugging
-            console.error('Login error:', errorResponse); // Log the error for debugging
-            alert(`Failed to log in. ${errorResponse.message || 'Please try again.'}`);
+            if (response.ok) {
+                // Redirect to dashboard after successful login
+                document.location.replace('/dashboard');
+            } else {
+                const errorResponse = await response.json();
+                console.error('Login error:', errorResponse);
+                alert(`Failed to log in. ${errorResponse.message || 'Please try again.'}`);
+            }
+        } catch (error) {
+            console.error('Network or server error:', error);
+            alert('An error occurred. Please check your network connection and try again.');
         }
+    } else {
+        alert('Please enter both username and password.');
     }
-  };
+};
   
-  // Ensure that the correct selector matches your login form class in login.handlebars
-  document.querySelector('.login-form form').addEventListener('submit', loginFormHandler); // Attach the event listener to the form
-  
+// Make sure the class selector below matches the login form in your Handlebars file
+document.querySelector('.login-form form').addEventListener('submit', loginFormHandler);

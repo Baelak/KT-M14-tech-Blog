@@ -1,5 +1,11 @@
-<h2>Your Dashboard</h2>
-<a href="/newpost">Create New Post</a>
+<header>
+<h1>Your Dashboard</h1>
+<nav>
+  <a href="/">Home</a>
+</nav>
+</header>
+<br>
+<button><a href="/newpost">Create New Post</a></button>
 
 {{#each blogs}}
   <div>
@@ -15,7 +21,7 @@
   $(document).on('click', '.delete-btn', function() {
     const postId = $(this).data('id');
     $.ajax({
-      url: `/api/blogs/${postId}`, // Adjust the endpoint according to your routes
+      url: `/api/blogs/${postId}`,
       method: 'DELETE',
       success: function() {
         location.reload(); // Refresh the page to see the changes

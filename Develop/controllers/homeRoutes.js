@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
       include: [{ model: User, attributes: ['username'] }],
     });
     const blogs = blogData.map((blog) => blog.get({ plain: true }));
-    res.render('homepage', { blogs, logged_in: req.session.logged_in });
+    res.render('homepage', { blogs, logged_in: req.session.loggedIn });
   } catch (err) {
     console.error('Error fetching blogs:', err);
     res.status(500).json({ message: 'Failed to retrieve blog posts.' });
@@ -17,19 +17,19 @@ router.get('/', async (req, res) => {
 
 // Render the user dashboard
 router.get('/dashboard', async (req, res) => {
-  if (!req.session.logged_in) {
+  if (!req.session.loggedIn) {
     return res.redirect('/login');
   }
 
   try {
     const userBlogs = await BlogPost.findAll({
-      where: { userId: req.session.user_id },
+      where: { userId: req.session.userId }, // Use userId from session correctly
       include: [{ model: User, attributes: ['username'] }],
     });
 
     const blogs = userBlogs.map((blog) => blog.get({ plain: true }));
 
-    res.render('dashboard', { blogs, logged_in: req.session.logged_in });
+    res.render('dashboard', { blogs, logged_in: req.session.loggedIn });
   } catch (err) {
     console.error('Error fetching user blogs:', err);
     res.status(500).json({ message: 'Failed to retrieve your blog posts.' });
@@ -38,7 +38,7 @@ router.get('/dashboard', async (req, res) => {
 
 // Render the login page
 router.get('/login', (req, res) => {
-  if (req.session.logged_in) {
+  if (req.session.loggedIn) {
     return res.redirect('/dashboard');
   }
   res.render('login'); // Render login page
@@ -46,7 +46,7 @@ router.get('/login', (req, res) => {
 
 // Render the signup page
 router.get('/signup', (req, res) => {
-  if (req.session.logged_in) {
+  if (req.session.loggedIn) {
     return res.redirect('/dashboard');
   }
   res.render('signup'); // Render signup page
