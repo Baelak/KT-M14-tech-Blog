@@ -17,7 +17,8 @@ router.post('/signup', async (req, res) => {
     req.session.save(() => {
       req.session.userId = newUser.id;
       req.session.loggedIn = true;
-      res.status(201).json(newUser);
+      // Redirect to the dashboard after successful signup
+      res.status(201).json({ message: 'Signup successful! Redirecting to dashboard...', redirect: '/dashboard' });
     });
   } catch (err) {
     console.error('Signup error:', err);
@@ -39,7 +40,8 @@ router.post('/login', async (req, res) => {
     req.session.save(() => {
       req.session.userId = user.id;
       req.session.loggedIn = true;
-      res.json({ user, message: 'You are now logged in!' });
+      // Redirect to the dashboard after successful login
+      res.json({ message: 'Login successful! Redirecting to dashboard...', redirect: '/dashboard' });
     });
   } catch (err) {
     console.error('Login error:', err);
