@@ -17,18 +17,20 @@ router.get('/', async (req, res) => {
 
 // Render the user dashboard
 router.get('/dashboard', async (req, res) => {
+  // Check if the user is logged in
   if (!req.session.loggedIn) {
     return res.redirect('/login');
   }
 
   try {
     const userBlogs = await BlogPost.findAll({
-      where: { userId: req.session.userId }, // Use userId from session correctly
+      where: { userId: req.session.userId }, // Ensure userId from session is used correctly
       include: [{ model: User, attributes: ['username'] }],
     });
 
     const blogs = userBlogs.map((blog) => blog.get({ plain: true }));
 
+    // Render dashboard with user blogs
     res.render('dashboard', { blogs, logged_in: req.session.loggedIn });
   } catch (err) {
     console.error('Error fetching user blogs:', err);
@@ -38,6 +40,7 @@ router.get('/dashboard', async (req, res) => {
 
 // Render the login page
 router.get('/login', (req, res) => {
+  // Redirect to dashboard if already logged in
   if (req.session.loggedIn) {
     return res.redirect('/dashboard');
   }
@@ -46,6 +49,7 @@ router.get('/login', (req, res) => {
 
 // Render the signup page
 router.get('/signup', (req, res) => {
+  // Redirect to dashboard if already logged in
   if (req.session.loggedIn) {
     return res.redirect('/dashboard');
   }
