@@ -18,7 +18,7 @@ const loginFormHandler = async (event) => {
             } else {
                 const errorResponse = await response.json();
                 console.error('Login error:', errorResponse);
-                alert(`Failed to log in. ${errorResponse.message || 'Please try again.'}`);
+                alert(`Failed to log in. ${errorResponse.message || 'Please try again. 😅'}`);
             }
         } catch (error) {
             console.error('Network or server error:', error);

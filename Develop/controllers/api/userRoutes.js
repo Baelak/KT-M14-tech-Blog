@@ -44,14 +44,16 @@ router.post('/login', async (req, res) => {
 });
 
 // LOGOUT a user
-router.post('/logout', withAuth, (req, res) => {
+// LOGOUT a user
+router.post('/logout', (req, res) => {
   if (req.session.loggedIn) {
     req.session.destroy((err) => {
       if (err) {
-        res.status(500).json({ message: 'Logout failed. Please try again.' });
-      } else {
-        res.status(204).end(); // Successfully logged out
+        console.error('Logout session destruction error:', err);
+        return res.status(500).json({ message: 'Failed to log out. Please try again.' });
       }
+      res.clearCookie('connect.sid');  // Clear session cookie after logout
+      res.status(204).end(); // No content response
     });
   } else {
     res.status(404).json({ message: 'No user is logged in.' });
