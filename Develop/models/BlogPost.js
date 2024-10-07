@@ -22,7 +22,7 @@ BlogPost.init(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'users', // Reference the 'User' model
+        model: 'user', // Reference the 'User' model
         key: 'id',
       },
     },
