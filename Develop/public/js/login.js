@@ -17,7 +17,7 @@ const loginFormHandler = async (event) => {
                 // Parse the response for the redirect information
                 const data = await response.json();
                 // Redirect to dashboard using the redirect field from the response
-                document.location.replace(data.redirect);
+                document.location.replace('/dashboard');
             } else {
                 const errorResponse = await response.json();
                 console.error('Login error:', errorResponse);
