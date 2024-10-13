@@ -1,4 +1,3 @@
-// connection.js
 const Sequelize = require('sequelize');
 require('dotenv').config();
 
@@ -6,8 +5,19 @@ let sequelize;
 
 try {
   if (process.env.DB_URL) {
-    sequelize = new Sequelize(process.env.DB_URL);
+    console.log('Using remote database from DB_URL.');
+    sequelize = new Sequelize(process.env.DB_URL, {
+      dialect: 'postgres',
+      protocol: 'postgres',
+      dialectOptions: {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false, // Ensure this is false if self-signed certs are used
+        },
+      },
+    });
   } else {
+    console.log('Using local database.');
     sequelize = new Sequelize(
       process.env.DB_NAME,
       process.env.DB_USER,
