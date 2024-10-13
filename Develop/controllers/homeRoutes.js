@@ -1,7 +1,7 @@
 // controllers/homeRoutes.js
 
 const router = require('express').Router();
-const { BlogPost, User } = require('../models'); // Ensure User model is imported
+const { BlogPost, User } = require('../models'); // Include User for blog authors
 
 // Render the homepage with all blog posts
 router.get('/', async (req, res) => {
@@ -30,7 +30,7 @@ router.get('/dashboard', async (req, res) => {
 
   try {
     const userBlogs = await BlogPost.findAll({
-      where: { userId: req.session.userId }, // Ensure userId from session is used correctly
+      where: { userId: req.session.userId }, // Use userId from session
       include: [{ model: User, attributes: ['username'] }],
       order: [['createdAt', 'DESC']], // Order posts by creation date
     });
@@ -72,7 +72,7 @@ router.get('/newpost', (req, res) => {
   if (!req.session.loggedIn) {
     return res.redirect('/login');
   }
-  res.render('newpost', { logged_in: req.session.loggedIn }); // Render newpost page
+  res.render('newpost', { logged_in: req.session.loggedIn }); // Render new post page
 });
 
 // Export the router

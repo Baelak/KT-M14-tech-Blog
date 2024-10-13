@@ -1,5 +1,7 @@
+// blogRoutes.js
+
 const router = require('express').Router();
-const { BlogPost } = require('../../models');
+const { BlogPost, User, Comment } = require('../../models'); // Ensure User and Comment models are imported
 const withAuth = require('../../utils/auth'); // Middleware to protect routes
 
 // GET route to fetch a single blog post (optional, for viewing individual posts)
@@ -27,6 +29,7 @@ router.get('/:id', async (req, res) => {
 
 // POST route to create a new blog post
 router.post('/newpost', withAuth, async (req, res) => {
+    console.log('Creating new post:', req.body); // Log the incoming request data
     try {
         const newPost = await BlogPost.create({
             title: req.body.title,

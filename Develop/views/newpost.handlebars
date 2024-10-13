@@ -36,7 +36,7 @@
             const content = document.getElementById('content').value.trim();
 
             if (title && content) {
-                const response = await fetch('/api/blogs/newpost', {
+                const response = await fetch('/api/blogs/newpost', {  // Endpoint changed to match your API
                     method: 'POST',
                     body: JSON.stringify({ title, content }),
                     headers: { 'Content-Type': 'application/json' },
