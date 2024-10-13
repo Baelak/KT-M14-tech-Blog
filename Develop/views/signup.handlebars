@@ -22,7 +22,7 @@
     </header>
     <div class="signup-form">
         <h2>Sign Up</h2>
-        <form action="/api/users/signup" method="POST">
+        <form> <!-- Removed action and method attributes -->
             <input type="text" id="email-signup" name="email" placeholder="Email Address" required>
             <input type="text" id="username-signup" name="username" placeholder="Username" required>
             <input type="password" id="password-signup" name="password" placeholder="Password" required>
@@ -30,5 +30,8 @@
         </form>
         <p>Already have an account? <a href="/login">Log in here</a></p>
     </div>
+
+    <!-- Include your signup.js script -->
+    <script src="/js/signup.js"></script>
 </body>
 </html>

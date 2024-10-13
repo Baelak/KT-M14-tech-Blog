@@ -23,8 +23,8 @@ const sess = {
     secure: process.env.NODE_ENV === 'production',  // Use HTTPS in production
     sameSite: 'strict',      // Prevents CSRF attacks
   },
-  resave: false,
-  saveUninitialized: true,
+  resave: false,             // Don't save session if unmodified
+  saveUninitialized: false,  // Don't create session until something stored
   store: new SequelizeStore({
     db: sequelize,
     checkExpirationInterval: 15 * 60 * 1000,  // Clean up expired sessions every 15 minutes
@@ -32,7 +32,7 @@ const sess = {
   }),
 };
 
-// Apply session middleware
+// Apply session middleware before other middleware and routes
 app.use(session(sess));
 
 // Set Handlebars as the view engine

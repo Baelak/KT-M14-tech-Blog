@@ -8,7 +8,7 @@ const withAuth = require('../../utils/auth'); // Authentication middleware
 router.post('/signup', async (req, res) => {
   try {
     // Validate password length
-    if (req.body.password.length < 8) {
+    if (!req.body.password || req.body.password.length < 8) {
       return res.status(400).json({ message: 'Password must be at least 8 characters long.' });
     }
 
@@ -17,7 +17,9 @@ router.post('/signup', async (req, res) => {
     req.session.save(() => {
       req.session.userId = newUser.id;
       req.session.loggedIn = true;
-      // Redirect to the dashboard after successful signup
+      req.session.username = newUser.username; // Optional: Store username in session
+
+      // Respond with a message and redirect URL
       res.status(201).json({ message: 'Signup successful! Redirecting to dashboard...', redirect: '/dashboard' });
     });
   } catch (err) {
@@ -40,17 +42,10 @@ router.post('/login', async (req, res) => {
     req.session.save(() => {
       req.session.userId = user.id;
       req.session.loggedIn = true;
-      req.session.username = user.username;
+      req.session.username = user.username; // Optional: Store username in session
 
-      req.session.save(() => {
-        res.status(200).json({ message: 'Login successful! Redirecting to dashboard...'});
-      })
-
-
-
-      // Redirect to the dashboard after successful login
-      //res.json({ message: 'Login successful! Redirecting to dashboard...',
-     // redirect: '/dashboard' });
+      // Respond with a message and redirect URL
+      res.json({ message: 'Login successful! Redirecting to dashboard...', redirect: '/dashboard' });
     });
   } catch (err) {
     console.error('Login error:', err);

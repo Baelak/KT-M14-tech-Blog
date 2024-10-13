@@ -1,3 +1,5 @@
+// public/js/login.js
+
 // Function to handle the login form submission
 const loginFormHandler = async (event) => {
     event.preventDefault(); // Prevent the default form submission behavior
@@ -14,10 +16,9 @@ const loginFormHandler = async (event) => {
             });
 
             if (response.ok) {
-                // Parse the response for the redirect information
-                const data = await response.json();
-                // Redirect to dashboard using the redirect field from the response
-                document.location.replace('/dashboard');
+                const data = await response.json(); // Parse the JSON response
+                alert(data.message); // Optionally alert the user
+                document.location.replace(data.redirect); // Redirect to dashboard
             } else {
                 const errorResponse = await response.json();
                 console.error('Login error:', errorResponse);
@@ -32,5 +33,5 @@ const loginFormHandler = async (event) => {
     }
 };
 
-// Make sure the class selector below matches the login form in your Handlebars file
+// Attach the event listener to the login form
 document.querySelector('.login-form form').addEventListener('submit', loginFormHandler);
