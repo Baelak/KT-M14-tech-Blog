@@ -12,7 +12,7 @@ router.post('/signup', async (req, res) => {
 
     const newUser = await User.create(req.body); 
     req.session.save(() => {
-      req.session.userId = newUser.id;
+      req.session.userId = newUser.id; // Set userId in session
       req.session.loggedIn = true;
 
       console.log('Session after signup:', req.session); // Debug log
@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
     }
     
     req.session.save(() => {
-      req.session.userId = user.id;
+      req.session.userId = user.id; // Set userId in session
       req.session.loggedIn = true;
 
       console.log('Session after login:', req.session); // Debug log

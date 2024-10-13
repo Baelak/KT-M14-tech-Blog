@@ -1,14 +1,14 @@
 // controllers/homeRoutes.js
 
 const router = require('express').Router();
-const { BlogPost, User, Comment } = require('../models'); // Include Comment if handling comments
+const { BlogPost, User } = require('../models'); // Ensure User model is imported
 
 // Render the homepage with all blog posts
 router.get('/', async (req, res) => {
   try {
     const blogData = await BlogPost.findAll({
       include: [{ model: User, attributes: ['username'] }],
-      order: [['createdAt', 'DESC']], // Optional: Order posts by creation date
+      order: [['createdAt', 'DESC']], // Order posts by creation date
     });
     const blogs = blogData.map((blog) => blog.get({ plain: true }));
     res.render('homepage', { 
@@ -32,7 +32,7 @@ router.get('/dashboard', async (req, res) => {
     const userBlogs = await BlogPost.findAll({
       where: { userId: req.session.userId }, // Ensure userId from session is used correctly
       include: [{ model: User, attributes: ['username'] }],
-      order: [['createdAt', 'DESC']], // Optional: Order posts by creation date
+      order: [['createdAt', 'DESC']], // Order posts by creation date
     });
 
     const blogs = userBlogs.map((blog) => blog.get({ plain: true }));

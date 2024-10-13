@@ -1,8 +1,8 @@
 <header>
-<h1>Your Dashboard</h1>
-<nav>
-  <a href="/">Home</a>
-</nav>
+  <h1>Your Dashboard</h1>
+  <nav>
+    <a href="/">Home</a>
+  </nav>
 </header>
 <br>
 <button><a href="/newpost">Create New Post</a></button>
@@ -14,6 +14,8 @@
     <button>Edit</button>
     <button class="delete-btn" data-id="{{this.id}}">Delete</button>
   </div>
+{{else}}
+  <p>No blog posts found. Create a new post!</p>
 {{/each}}
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
