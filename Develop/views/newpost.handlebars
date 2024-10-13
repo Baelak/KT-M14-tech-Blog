@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Create New Post - The Tech Blog</title>
+</head>
+<body>
+    <header>
+        <h1>Create a New Post</h1>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+        <form id="new-post-form">
+            <label for="title">Post Title:</label>
+            <input type="text" id="title" name="title" required>
+
+            <label for="content">Post Content:</label>
+            <textarea id="content" name="content" required></textarea>
+
+            <button type="submit">Create Post</button>
+        </form>
+    </main>
+
+    <script>
+        document.getElementById('new-post-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const title = document.getElementById('title').value.trim();
+            const content = document.getElementById('content').value.trim();
+
+            if (title && content) {
+                const response = await fetch('/api/blogs/newpost', {
+                    method: 'POST',
+                    body: JSON.stringify({ title, content }),
+                    headers: { 'Content-Type': 'application/json' },
+                });
+
+                if (response.ok) {
+                    document.location.replace('/dashboard'); // Redirect to dashboard after post creation
+                } else {
+                    alert('Failed to create post.');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
