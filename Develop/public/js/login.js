@@ -1,5 +1,4 @@
 // public/js/login.js
-
 // Function to handle the login form submission
 const loginFormHandler = async (event) => {
     event.preventDefault(); // Prevent the default form submission behavior
@@ -16,9 +15,9 @@ const loginFormHandler = async (event) => {
             });
 
             if (response.ok) {
-                const data = await response.json(); // Parse the JSON response
-                alert(data.message); // Optionally alert the user
-                document.location.replace(data.redirect); // Redirect to dashboard
+                const data = await response.json();
+                console.log('Login success:', data); // Debug log
+                document.location.replace('/dashboard'); // Hardcode redirect for now
             } else {
                 const errorResponse = await response.json();
                 console.error('Login error:', errorResponse);
@@ -33,5 +32,5 @@ const loginFormHandler = async (event) => {
     }
 };
 
-// Attach the event listener to the login form
+// Attach event listener to the form
 document.querySelector('.login-form form').addEventListener('submit', loginFormHandler);
