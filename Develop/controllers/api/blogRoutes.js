@@ -4,11 +4,14 @@ const router = require('express').Router();
 const { BlogPost, User, Comment } = require('../../models'); // Ensure User and Comment models are imported
 const withAuth = require('../../utils/auth'); // Middleware to protect routes
 
-// GET route to fetch a single blog post (optional, for viewing individual posts)
-router.get('/:id', async (req, res) => {
+// GET route to fetch a single blog post for viewing
+router.get('/posts:id', async (req, res) => {  // Changed route to include /posts
     try {
         const blogPostData = await BlogPost.findByPk(req.params.id, {
-            include: [{ model: User, attributes: ['username'] }, { model: Comment }],
+            include: [
+                { model: User, attributes: ['username'] }, // Include the username
+                { model: Comment }
+            ],
         });
 
         if (!blogPostData) {
@@ -17,9 +20,10 @@ router.get('/:id', async (req, res) => {
         }
 
         const blogPost = blogPostData.get({ plain: true });
-        res.render('post', { 
-            ...blogPost, 
-            logged_in: req.session.loggedIn 
+        res.render('post', {  // Render the post.handlebars view (no .handlebars in the name)
+            post: blogPost,
+            comments: blogPost.Comments,  // Pass comments to the view
+            logged_in: req.session.loggedIn // Ensure correct session variable
         });
     } catch (err) {
         console.error('Error fetching blog post:', err);
@@ -44,8 +48,8 @@ router.post('/newpost', withAuth, async (req, res) => {
     }
 });
 
-// PUT route to update an existing blog post (optional)
-router.put('/:id', withAuth, async (req, res) => {
+// PUT route to update an existing blog post
+router.put('/posts/:id', withAuth, async (req, res) => {  // Ensure route matches fetch post
     try {
         const updatedPost = await BlogPost.update(
             {
@@ -73,7 +77,7 @@ router.put('/:id', withAuth, async (req, res) => {
 });
 
 // DELETE route to delete a blog post
-router.delete('/:id', withAuth, async (req, res) => {
+router.delete('/posts/:id', withAuth, async (req, res) => {  // Ensure route matches fetch post
     try {
         const postData = await BlogPost.destroy({
             where: {

@@ -1,7 +1,7 @@
 // controllers/homeRoutes.js
 
 const router = require('express').Router();
-const { BlogPost, User } = require('../models'); // Include User for blog authors
+const { BlogPost, User, Comment } = require('../models'); // Include Comment model for fetching comments
 
 // Render the homepage with all blog posts
 router.get('/', async (req, res) => {
@@ -45,6 +45,29 @@ router.get('/dashboard', async (req, res) => {
   } catch (err) {
     console.error('Error fetching user blogs:', err);
     res.status(500).json({ message: 'Failed to retrieve your blog posts.' });
+  }
+});
+
+// Render the individual post page
+router.get('/post/:id', async (req, res) => {
+  try {
+    const blogData = await BlogPost.findByPk(req.params.id, {
+      include: [{ model: User, attributes: ['username'] }, { model: Comment, include: [User] }]
+    });
+
+    if (!blogData) {
+      return res.status(404).json({ message: 'Post not found.' });
+    }
+
+    const post = blogData.get({ plain: true });
+    res.render('post', { 
+      post, 
+      comments: post.Comments, // Assuming Comments is the alias for the Comment model
+      logged_in: req.session.loggedIn 
+    });
+  } catch (err) {
+    console.error('Error fetching post:', err);
+    res.status(500).json({ message: 'Failed to retrieve post.' });
   }
 });
 
