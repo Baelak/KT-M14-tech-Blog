@@ -25,7 +25,7 @@ https://github.com/Baelak/KT-M14-tech-Blog
 * [Questions](#questions)
 
 ## Features
-Create, Edit, Add and Delete Blogs.
+Create, Edit, Add and Delete Posts.
 
 ## Dependencies
 bcrypt, express, express-handlebars, express-session, pg, sequelize are some of dependencies for this project.
